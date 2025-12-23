@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Todo App{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="navbar__brand">TodoApp</div>
+
+      {% if user.is_authenticated %}
+      <div class="username">👋🏻{{user}}</div>
+      <form
+        action="{% url 'user_logout' %}"
+        method="post"
+        class="navbar__logout"
+      >
+        {% csrf_token %}
+        <button type="submit" class="btn btn--danger">Logout</button>
+      </form>
+      {% else %}
+      <a href="{% url 'user_register'%}">Register</a>
+      <a href="{% url 'user_login'%}">Login</a>
+      {% endif %}
+    </nav>
+    {% if error %}
+    <div class="alert alert--error">{{ error }}</div>
+    {% endif %} {% if messages %} {% for message in messages%}
+    <div class="alert alert--{{ message.tags }}">{{ message }}</div>
+    {% endfor %} {% endif %}
+
+    <main class="container">{% block content %}{% endblock %}</main>
+  </body>
+</html>

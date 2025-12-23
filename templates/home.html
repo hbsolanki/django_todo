@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% block title %}Todo App{% endblock %} <br />
+{% block content %}
+<form method="post" action="{% url 'todo_add' %}" class="todo-form">
+  {% csrf_token %}
+  <div class="todo-form__group">
+    <label for="todo-title" class="todo-form__label">Title</label>
+    <input
+      type="text"
+      id="todo-title"
+      name="title"
+      class="todo-form__input"
+      placeholder="Enter a task"
+      required
+    />
+    <button type="submit" class="btn btn--primary">Add</button>
+  </div>
+</form>
+<div class="todo-list">
+  <ul class="todo-list__items">
+    {% for todo in todos %}
+    <li class="todo-item {% if todo.complate %}todo-item--completed{% endif %}">
+      <div class="todo-item__info">
+        <span class="todo-item__title">{{ todo.title }}</span>
+        {% if todo.complate %}
+        <span class="todo-item__date"
+          >{{ todo.complate_at|date:"d M Y, h:i A" }}</span
+        >
+        {% else %}
+        <span class="todo-item__date"
+          >{{ todo.created_at|date:"d M Y, h:i A" }}</span
+        >
+        {% endif %}
+      </div>
+
+      <div class="todo-item__actions">
+        {% if not todo.complate %}
+        <form action="{% url 'todo_complate' todo.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn--success">Complete</button>
+        </form>
+        {% endif %}
+
+        <form action="{% url 'todo_delete' todo.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn--danger">Delete</button>
+        </form>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}
