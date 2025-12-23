@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%+uh2(s8av!af7=yoi_%t-41#@eze!egkmv*a$r69popvw(01_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG") or True
+# DEBUG=True
+# print(os.getenv("db_user"))
 
 ALLOWED_HOSTS = []
 
@@ -78,15 +82,13 @@ WSGI_APPLICATION = 'todo_project.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "todo_project",
-        "USER": "hbsolanki.07",
-        "PASSWORD": "8160062665",
-        "HOST": "localhost",
-        "PORT": "5432",
+        "NAME": os.getenv("todo_project"),
+        "USER": os.getenv("db_user"),
+        "PASSWORD": os.getenv("db_pass"),
+        "HOST": os.getenv("db_host"),
+        "PORT":os.getenv("db_port"),
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
